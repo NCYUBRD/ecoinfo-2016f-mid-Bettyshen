@@ -37,10 +37,13 @@ output: html_document
 (b) 請分別列出 C, EC, K, Na, N 最高的五個樣區(plotid)
 
 #解答一
-產生10000組隨機正整數,使用rnorm(n, mean = 0, sd = 1)，正整數定義為：大於零且間隔等於一的整數
+產生10000組隨機正整數,使用sample.int(n, size = n, replace = FALSE, prob = NULL)，正整數定義為：大於零且間隔等於一的整數
 ```{r}
-x<- rnorm(10000, mean= ,sd=1)
-for (x in 1:) {print(x)
-  
-}
-#不能限定1:10000，程式語言會把他視為只能從1排序到10000。因此，須從1排序到無限大
+
+random10k<-sample.int(10000)
+print(random10k)
+#檔案輸出write.csv()
+write.csv(random10k,file = '~/Desktop/生態資訊學/生態資訊學期中考/random10k.csv')
+
+
+```
