@@ -14,7 +14,7 @@ output: html_document
 
 (a) 將 yyyymmddhh 轉成 POSIXct 時間戳記格式， 並新增為一個欄(variable)，命名為 timestamp。並將此 sample data 輸出為 sample_data_parsed.csv (以逗號分隔，具有欄位名稱)
 
-(b) 請計算 2014 年至 2015 年這個測站的每月平均氣溫、每月平均濕度、每月累積降水， 
+(b) 請計算 2014 年至 2015 年這個測站的每月平均氣溫、每月平均濕度、每月累積降水，並用表格呈現 
 (c) 請計算 2014 年和 2015 年最冷月分別是在哪個月份？(提示：先計算月均溫)
 (d) 在 2015 年最冷的那個月份中，該月中每日的最低溫平均是幾度C？
 
@@ -76,7 +76,7 @@ SS01: 日照時數(hr)
 #輸入必要的library,設定工作目錄,將'sample_data.txt'匯入r中
 
 library(data.table)
-setwd('~/Desktop/生態資訊學/生態資訊學期中考/~')
+setwd('~/Desktop/生態資訊學/生態資訊學期中考/')
 
 #將資料呈現-9996、-9997、-9999數值轉為NA
 sample_data_parsed <- read.table('~/Desktop/生態資訊學/生態資訊學期中考/sample_data.txt',header = TRUE,na.strings = c('-9996','-9997','-9999')
@@ -95,5 +95,14 @@ colnames(sample_data_parsed) <-c('yyyymmddhh','PS01','TX01','RH01','WD01'   ,'WD
 
 #輸出為 sample_data_parsed.csv
 write.csv(sample_data_parsed,file='~/Desktop/生態資訊學/生態資訊學期中考/sample_data_parsed',sep = ",")
+
+```
+
+我們要計算“每月平均氣溫、每月平均濕度、每月累積降水“
+平均使用:mean、累積使用：sum
+```{r}
+#
+cbind(sample_data_parsed,'yyyymm')
+aggregate.data.frame(sample_data_parsed, by=list(yyyymm,PS01),FUN= 'mean')
 
 ```
