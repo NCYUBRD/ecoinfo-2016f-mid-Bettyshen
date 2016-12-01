@@ -79,30 +79,86 @@ library(data.table)
 setwd('~/Desktop/生態資訊學/生態資訊學期中考/')
 
 #將資料呈現-9996、-9997、-9999數值轉為NA
-sample_data_parsed <- read.table('~/Desktop/生態資訊學/生態資訊學期中考/sample_data.txt',header = TRUE,na.strings = c('-9996','-9997','-9999')
-                   )
+sample_data <- read.table('~/Desktop/生態資訊學/生態資訊學期中考/sample_data.txt',header = TRUE,na.strings = c('-9996','-9997','-9999'))
 
 #先確定他是否為data.frame格式，再將 yyyymmddhh 轉成 POSIXct 時間戳記格式,再增設一個欄(variable),命名為" timestamp"
-class(sample_data_parsed)
+class(sample_data)
 
-#格式為data.frame沒錯，再來就是用cbind合併多的一個欄位"timestamp"。
+#格式為data.frame沒錯
 #先指定原始資料第一欄"$"，因為一開始時間軸都是從第一小時開始計算，我們想要固定格式從"0"小時開始，所以我們把原始時間都"-1"。用strptime置換時間格式成"2014-01-01 02:00:00"的樣式
-sample_data_parsed<- cbind(sample_data_parsed,strptime(sample_data_parsed$yyyymmddhh-1,"%Y%m%d%H"))
 
-#將最後一欄命名為"timestamp"
-colnames(sample_data_parsed) <-c('yyyymmddhh','PS01','TX01','RH01','WD01'   ,'WD02','PP01','SS01','timestamp')
+
+timestamp <- as.POSIXct(strptime(sample_data$yyyymmddhh-1,'%Y%m%d%H'))
+#定義'日'時間格式
+day <- format.Date(timestamp,'%Y%m%d')
+#定義'日'時間格式
+month <- format.Date(timestamp,'%Y%m')
+#定義'年'時間格式
+year <- format.Date(timestamp,'%Y')
+#將新增欄位用"cbind"合併
+sample_data_allcol<- cbind(sample_data,timestamp, day , month, year)
+
 
 
 #輸出為 sample_data_parsed.csv
-write.csv(sample_data_parsed,file='~/Desktop/生態資訊學/生態資訊學期中考/sample_data_parsed',sep = ",")
+write.csv(sample_data_allcol,file='~/Desktop/生態資訊學/生態資訊學期中考/sample_data_parsed',sep = ",")
 
 ```
 
 我們要計算“每月平均氣溫、每月平均濕度、每月累積降水“
 平均使用:mean、累積使用：sum
 ```{r}
-#
-cbind(sample_data_parsed,'yyyymm')
-aggregate.data.frame(sample_data_parsed, by=list(yyyymm,PS01),FUN= 'mean')
+#製作出mean公式mean_omit_na
+mean_omit_na <-function(x){
+  x<-as.numeric(x)
+  return(mean(x, na.rm = T))
+}
+
+#平均每月均溫
+mean_MonTem<-aggregate(sample_data_allcol$TX01, by= list (sample_data_allcol$month) ,FUN= mean_omit_na)
+
+mean_MonTem
+#平均每月濕度
+mean_MonWet<-aggregate(sample_data_allcol$RH01, by= list
+(sample_data_allcol$month), FUN= mean_omit_na)
+mean_MonWet
+#製作出sum公式sum_omit_na
+sum_omit_na <-function(x){
+  x<-as.numeric(x)
+  return(sum(x, na.rm = T))
+}
+#計算每月累積降水
+sum_MonPre<- aggregate(sample_data_allcol$PP01, by=list
+(sample_data_allcol$month),FUN= sum_omit_na)
+sum_MonPre
+#將以上數值做成data.frame格式，用cbind合併
+Month_collumn<- cbind.data.frame(mean_MonTem,mean_MonWet,sum_MonPre)
+Month_collumn<-data.frame(Month_collumn, row.names = TRUE)
+Month_collumn_trans<-t(Month_collumn)
+#清除不必要的欄位
+Month_collumn_trans<-Month_collumn[-c(2,4),]
+Month_collumn_trans<-data.frame(Month_collumn_trans)
+```
+#設定欄位名稱
+a<-data.frame(name=c("月平均氣溫","月平均濕度","月累積降水"),b=1:3)
+rownames(Month_collumn_trans)<-a$name
+View(Month_collumn_trans)
+
+
+```{r}
+#計算2014和2015年最冷月分別在哪個月份？
+#做出最冷min的方程式
+coldest<-function(x){
+  min(x, na.rm = TRUE)
+}
+
+Min_Tep<- aggregate(TX01~month, data = sample_data_allcol,FUN= coldest)
+```
+
+
+#2015最冷月份"2"月，該月中每日最低溫平均是幾度C?
+```{r}
+#將'月'與'日'結合起來(group_by)，先算每日最低溫
+Month_day<- cbind(sample_data_allcol,month,day)
 
 ```
