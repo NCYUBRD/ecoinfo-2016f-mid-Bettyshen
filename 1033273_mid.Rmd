@@ -104,7 +104,7 @@ sample_data_allcol<- cbind(sample_data,timestamp, day , month, year)
 write.csv(sample_data_allcol,file='~/Desktop/生態資訊學/生態資訊學期中考/sample_data_parsed',sep = ",")
 
 ```
-
+#(a~b)
 我們要計算“每月平均氣溫、每月平均濕度、每月累積降水“
 平均使用:mean、累積使用：sum
 ```{r}
@@ -140,21 +140,52 @@ Month_collumn_trans<-Month_collumn[-c(2,4),]
 Month_collumn_trans<-data.frame(Month_collumn_trans)
 ```
 
-
+#(c)計算2014和2015年最冷月分別在哪個月份？
 ```{r}
-#計算2014和2015年最冷月分別在哪個月份？
 #做出最冷min的方程式
 coldest<-function(x){
-  min(x, na.rm = TRUE)
+  x<-as.numeric(x)
+  return(min(x, na.rm = TRUE))
 }
 
 Min_Tep<- aggregate(TX01~month, data = sample_data_allcol,FUN= coldest)
 ```
 
 
-#2015最冷月份"2"月，該月中每日最低溫平均是幾度C?
+#(d)2015最冷月份"2"月，該月中每日最低溫平均是幾度C?
 ```{r}
-#將'月'與'日'結合起來(group_by)，先算每日最低溫
-Month_day<- cbind(sample_data_allcol,month,day)
+Coldest_Feb <-aggregate(sample_data_allcol$TX01~"2015-2", data = Min_Tep,FUN=coldest)
 
+```
+#(e)請計算2014年和2015年，最熱的月份分別為哪兩個月？
+```{r}
+#做出最熱max的方程式
+hottest<-function(x){
+  x<-as.numeric(x)
+  return(max(x, na.rm = TRUE))
+}
+Max_Tep<- aggregate(TX01~month, data = sample_data_allcol, FUN=
+hottest)
+#2014年9月最熱;2015年6月最熱
+```
+#(f)請計算2014年最熱月份中，該月的每日最高溫平均為幾度C?
+```{r}
+
+```
+#(g)請計算出2014~2015年中，最溼月份的平均溫度
+```{r}
+#先看哪個月份是最濕的,設定最濕月份的公式
+wettest<-function(x){
+  x<-as.numeric(x)
+  return(max(x, na.rm = TRUE))
+}
+#代入公式，看哪個月份最潮濕
+Wettest_month <- aggregate(PP01~month, data=sample_data_allcol, FUN= wettest)
+#2014年7月最潮濕
+#2014年7月平均溫度
+mean_201407_Tep <- aggregate(sample_data_allcol$TX01,by=list(sample_data_allcol$month=='201407'),FUN=mean_omit_na)
+#2014年7月平均溫度為：29.40343
+```
+#(h)請計算每個月的月溫差，平均月溫差最大的是哪個月？
+```{r}
 ```
