@@ -195,6 +195,25 @@ mean_201407_Tep <- aggregate(sample_data_allcol$TX01,by=list(sample_data_allcol$
 ```{r}
 #將澎湖南方四島的資料輸入進來
 sample_data_Penghu <- read.csv('~/Desktop/生態資訊學/生態資訊學期中考/penghu_env.csv',header = TRUE)
-#各項平均
-Penghu_mean <- aggregate(sample_data_Penghu$total_cover, by=list( sample_data_Penghu$total_cover), FUN= mean_omit_na)
+#各項平均:total_cover
+Penghu_mean_total_cover<- mean(sample_data_Penghu$total_cover)
+Penghu_mean_total_cover
+#mean C
+Penghu_mean_C <-mean(sample_data_Penghu$C)
+Penghu_mean_C
+#mean EC
+Penghu_mean_EC <-mean(sample_data_Penghu$EC)
+Penghu_mean_EC
+#mean K
+Penghu_mean_K <-mean(sample_data_Penghu$K)
+Penghu_mean_K
+#mean Na
+Penghu_mean_Na <-mean(sample_data_Penghu$Na)
+Penghu_mean_Na
+#mean N
+Penghu_mean_N <-mean(sample_data_Penghu$N)
+Penghu_mean_N
+#mean rock_ratio
+Penghu_mean_rock_ratio <-mean(sample_data_Penghu$rock_ratio,na.rm = TRUE)
+Penghu_mean_rock_ratio
 ```
