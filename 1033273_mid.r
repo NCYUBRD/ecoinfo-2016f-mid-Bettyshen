@@ -188,4 +188,3 @@ mean_201407_Tep <- aggregate(sample_data_allcol$TX01,by=list(sample_data_allcol$
 ```
 #(h)請計算每個月的月溫差，平均月溫差最大的是哪個月？
 ```{r}
-```

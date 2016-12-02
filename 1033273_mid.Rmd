@@ -189,3 +189,12 @@ mean_201407_Tep <- aggregate(sample_data_allcol$TX01,by=list(sample_data_allcol$
 #(h)請計算每個月的月溫差，平均月溫差最大的是哪個月？
 ```{r}
 ```
+
+#試題四
+(a) 請計算各島環境因子(total_cover, C, EC, ..., etc.) 的平均、 第一四分位數、中位數、第三四分位數、最大值及最小值以及標準差，並整理成如下表格
+```{r}
+#將澎湖南方四島的資料輸入進來
+sample_data_Penghu <- read.csv('~/Desktop/生態資訊學/生態資訊學期中考/penghu_env.csv',header = TRUE)
+#各項平均
+Penghu_mean <- aggregate(sample_data_Penghu$total_cover, by=list( sample_data_Penghu$total_cover), FUN= mean_omit_na)
+```
