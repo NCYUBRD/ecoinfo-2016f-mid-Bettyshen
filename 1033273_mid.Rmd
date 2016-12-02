@@ -217,3 +217,40 @@ Penghu_mean_N
 Penghu_mean_rock_ratio <-mean(sample_data_Penghu$rock_ratio,na.rm = TRUE)
 Penghu_mean_rock_ratio
 ```
+
+```{r}
+#四分位數計算
+#total_cover
+col <-sample_data_Penghu[,3:9]
+total_quantile_total_cover<-quantile(col$total_cover,na.rm = T)
+total_quantile_total_cover
+#C
+total_quantile_total_C<-quantile(col$C,na.rm = T)
+total_quantile_total_C
+#EC
+total_quantile_EC<-quantile(col$EC,na.rm = T)
+total_quantile_EC
+#K
+total_quantile_K<-quantile(col$K,na.rm = T)
+total_quantile_K
+#Na
+total_quantile_Na<-quantile(col$Na,na.rm = T)
+total_quantile_Na
+#N
+total_quantile_N<-quantile(col$N,na.rm = T)
+total_quantile_N
+#rock_ratio
+total_quantile_rock_ratio<-quantile(col$rock_ratio,na.rm = T)
+total_quantile_rock_ratio
+```
+#最大值與最小值
+```{r}
+#total_cover
+max_Penghu_total_cover<- max(col$total_cover,na.rm = T)
+min_Penghu_total_cover<- min(col$total_cover,na.rm = T)
+sd_Penghu_total_cover<- sd(col$total_cover,na.rm = T)
+#C
+max_Penghu_C <- max(col$C, na.rm = T)
+min_Penghu_C <- min(col$C, na.rm = T)
+sd_Penghu_C <- sd(col$C, na.rm = T)
+```
