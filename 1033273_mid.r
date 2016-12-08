@@ -98,7 +98,7 @@ year <- format.Date(timestamp,'%Y')
 #將新增欄位用"cbind"合併
 sample_data_allcol<- cbind(sample_data,timestamp, day , month, year)
 
-
+tbl_sample_data <- tbl_df(sample_data_allcol)
 
 #輸出為 sample_data_parsed.csv
 write.csv(sample_data_allcol,file='~/Desktop/生態資訊學/生態資訊學期中考/sample_data_parsed',sep = ",")
@@ -154,7 +154,20 @@ Min_Tep<- aggregate(TX01~month, data = sample_data_allcol,FUN= coldest)
 
 #(d)2015最冷月份"2"月，該月中每日最低溫平均是幾度C?
 ```{r}
-Coldest_Feb <-aggregate(sample_data_allcol$TX01~"2015-2", data = Min_Tep,FUN=coldest)
+library(dplyr)
+
+
+coldest_201502 <- filter(tbl_sample_data, month == '201502')
+
+by_day_month <- group_by(coldest_201502, month, day)
+
+Febcoldest = summarise(by_day_month, minTP = min(TX01, na.rm = T))
+by_month<-group_by(Febcoldest, month)
+
+mean_Feb_coldest<- summarise(by_month, mean_minTP = mean(minTP, na.rm = T))
+
+
+Coldest_Feb <-
 
 ```
 #(e)請計算2014年和2015年，最熱的月份分別為哪兩個月？
@@ -195,6 +208,82 @@ mean_201407_Tep <- aggregate(sample_data_allcol$TX01,by=list(sample_data_allcol$
 ```{r}
 #將澎湖南方四島的資料輸入進來
 sample_data_Penghu <- read.csv('~/Desktop/生態資訊學/生態資訊學期中考/penghu_env.csv',header = TRUE)
-#各項平均
-Penghu_mean <- aggregate(sample_data_Penghu$total_cover, by=list( sample_data_Penghu$total_cover), FUN= mean_omit_na)
+#各項平均:total_cover
+Penghu_mean_total_cover<- mean(sample_data_Penghu$total_cover)
+Penghu_mean_total_cover
+#mean C
+Penghu_mean_C <-mean(sample_data_Penghu$C)
+Penghu_mean_C
+#mean EC
+Penghu_mean_EC <-mean(sample_data_Penghu$EC)
+Penghu_mean_EC
+#mean K
+Penghu_mean_K <-mean(sample_data_Penghu$K)
+Penghu_mean_K
+#mean Na
+Penghu_mean_Na <-mean(sample_data_Penghu$Na)
+Penghu_mean_Na
+#mean N
+Penghu_mean_N <-mean(sample_data_Penghu$N)
+Penghu_mean_N
+#mean rock_ratio
+Penghu_mean_rock_ratio <-mean(sample_data_Penghu$rock_ratio,na.rm = TRUE)
+Penghu_mean_rock_ratio
+```
+
+```{r}
+#四分位數計算
+#total_cover
+col <-sample_data_Penghu[,3:9]
+total_quantile_total_cover<-quantile(col$total_cover,na.rm = T)
+total_quantile_total_cover
+#C
+total_quantile_total_C<-quantile(col$C,na.rm = T)
+total_quantile_total_C
+#EC
+total_quantile_EC<-quantile(col$EC,na.rm = T)
+total_quantile_EC
+#K
+total_quantile_K<-quantile(col$K,na.rm = T)
+total_quantile_K
+#Na
+total_quantile_Na<-quantile(col$Na,na.rm = T)
+total_quantile_Na
+#N
+total_quantile_N<-quantile(col$N,na.rm = T)
+total_quantile_N
+#rock_ratio
+total_quantile_rock_ratio<-quantile(col$rock_ratio,na.rm = T)
+total_quantile_rock_ratio
+```
+#最大值與最小值
+```{r}
+#total_cover
+max_Penghu_total_cover<- max(col$total_cover,na.rm = T)
+min_Penghu_total_cover<- min(col$total_cover,na.rm = T)
+sd_Penghu_total_cover<- sd(col$total_cover,na.rm = T)
+#C
+max_Penghu_C <- max(col$C, na.rm = T)
+min_Penghu_C <- min(col$C, na.rm = T)
+sd_Penghu_C <- sd(col$C, na.rm = T)
+#EC
+max_Penghu_EC <- max(col$EC, na.rm = T)
+min_Penghu_EC <- min(col$EC, na.rm = T)
+sd_Penghu_EC <- sd(col$EC, na.rm = T)
+#K
+max_Penghu_K <- max(col$K, na.rm = T)
+min_Penghu_K <- min(col$K, na.rm = T)
+sd_Penghu_K <- sd(col$K, na.rm = T)
+#Na
+max_Penghu_Na <- max(col$Na, na.rm = T)
+min_Penghu_Na <- min(col$Na, na.rm = T)
+sd_Penghu_Na <- sd(col$Na, na.rm = T)
+#N
+max_Penghu_N <- max(col$N, na.rm = T)
+min_Penghu_N <- min(col$N, na.rm = T)
+sd_Penghu_N <- sd(col$N, na.rm = T)
+#rock_ratio
+max_Penghu_rock_ratio <- max(col$rock_ratio, na.rm = T)
+min_Penghu_rock_ratio <- min(col$rock_ratio, na.rm = T)
+sd_Penghu_rock_ratio <- sd(col$rock_ratio, na.rm = T)
 ```
